@@ -8,18 +8,22 @@ class Solution {
 public:
     bool isAnagram(string s, string t) 
     {
-        if (s.length()!=t.length()) 
+        // can do with 26 length array also
+        int a[26]={0};
+
+        if(s.size()!=t.size())
             return false;
 
-        unordered_map<char, int> sc;
-        unordered_map<char, int> tc;
+        for(char c: s)
+            a[c-'a']++;
 
-        for(int i=0;i<s.length();i++)
-        {
-            sc[s[i]]++;
-            tc[t[i]]++;
-        }
+        for(char c: t)
+            a[c-'a']--;
 
-        return sc==tc;
+        for(int i=0;i<26;i++)
+            if(a[i]!=0)
+                return false;
+
+        return true;
     }
 };
