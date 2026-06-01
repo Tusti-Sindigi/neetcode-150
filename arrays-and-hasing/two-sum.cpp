@@ -1,34 +1,26 @@
-#include<stdio.h>
 #include<vector>
-#include<algorithm>
+#include<unordered_map>
 using std::vector;
-using std::pair;
+using std::unordered_map;
 
 class Solution 
 {
 public:
     vector<int> twoSum(vector<int>& nums, int target) 
     {   
-        vector<pair<int, int>> m;
+       unordered_map <int, int> map;
+        vector <int> res;
         for(int i=0;i<nums.size();i++)
-            m.push_back({nums[i], i});
-
-        sort(m.begin(), m.end());
-        int l=0, r=nums.size()-1;
-        vector<int> res;
-        while(l<r)
         {
-            int sum=m[l].first+m[r].first;
-            if(sum==target)
+            int leftout=target-nums[i];
+
+            if(map.find(leftout)!=map.end())
             {
-                res.push_back(m[l].second);
-                res.push_back(m[r].second);
+                res.push_back(map[leftout]);
+                res.push_back(i);
                 break;
             }
-            else if(sum>target)
-                r--;
-            else
-                l++;
+            map[nums[i]]=i;
         }
         return res;
     }
