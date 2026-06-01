@@ -1,26 +1,25 @@
 #include <stdio.h>
 #include <string>
+#include <unordered_map>
 using std::string;
+using std::unordered_map;
 
 class Solution {
 public:
     bool isAnagram(string s, string t) 
     {
-        int a[256]={0};
-
-        if(s.size()!=t.size())
+        if (s.length()!=t.length()) 
             return false;
 
-        for(char c: s)
-            a[c]++;
+        unordered_map<char, int> sc;
+        unordered_map<char, int> tc;
 
-        for(char c: t)
-            a[c]--;
+        for(int i=0;i<s.length();i++)
+        {
+            sc[s[i]]++;
+            tc[t[i]]++;
+        }
 
-        for(int i=0;i<256;i++)
-            if(a[i]!=0)
-                return false;
-
-        return true;
+        return sc==tc;
     }
 };
