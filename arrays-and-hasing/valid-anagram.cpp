@@ -1,28 +1,26 @@
 #include <stdio.h>
 #include <string>
-#include <map>
 using std::string;
-using std::map;
 
 class Solution {
 public:
     bool isAnagram(string s, string t) 
     {
+        int a[256]={0};
+
         if(s.size()!=t.size())
             return false;
 
-        map<char, int> m;
-
         for(char c: s)
-            m[c]++;
-        for(char c: t)
-            m[c]--;
+            a[c]++;
 
-        //auto --> tells figure out the type urself
-        for(auto c: m)
-            if(c.second!=0)
+        for(char c: t)
+            a[c]--;
+
+        for(int i=0;i<256;i++)
+            if(a[i]!=0)
                 return false;
-        
+
         return true;
     }
 };
