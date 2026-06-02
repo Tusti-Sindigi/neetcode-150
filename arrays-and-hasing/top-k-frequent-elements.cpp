@@ -9,12 +9,7 @@ public:
         vector<int> res;
         unordered_map<int, int> map;
         for(int n: nums)
-        {
-            if(map.find(n)==map.end())
-                map.insert({n,0});
-
             map[n]++;
-        }
 
         for(int i=0;i<k;i++)
         {
