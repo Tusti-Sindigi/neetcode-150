@@ -11,23 +11,23 @@ public:
         for(int n: nums)
             map[n]++;
 
-        for(int i=0;i<k;i++)
+        vector<vector<int>> temp(nums.size()+1);
+
+        for(auto c: map)
+            temp[c.second].push_back(c.first);
+
+        for(int i=temp.size()-1;i>0;i--)
         {
-            int max=0;
-            int value;
-            for(auto c: map)
+            for(int c: temp[i])
             {
-                if(c.second>max)
-                {
-                    max=c.second;
-                    value=c.first;
-                }
-
+                k--;
+                res.push_back(c);
+                if(k==0)
+                    return res;
             }
-            res.push_back(value);
-            map.erase(value);
+            if(k==0)
+                break;
         }
-
         return res;
     }
 };
