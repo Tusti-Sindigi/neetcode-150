@@ -4,8 +4,7 @@ using namespace std;
 class MinStack {
 public:
 
-    stack<int> stk;
-    stack<int> min_stk;
+    stack<pair<int, int>> stk;
 
     MinStack() 
     {
@@ -14,25 +13,25 @@ public:
     
     void push(int value) 
     {
-        stk.push(value);
-        value=min(value, min_stk.empty()? value : min_stk.top());
-        min_stk.push(value);
+        if(stk.empty())
+            stk.push({value, value});
+        else
+            stk.push({value, min(value, stk.top().second)});
     }
     
     void pop() 
     {
         stk.pop();
-        min_stk.pop();
     }
     
     int top() 
     {
-        return stk.top();
+        return stk.top().first;
     }
     
     int getMin() 
     {
-        return min_stk.top();
+        return stk.top().second;
     }
 };
 
