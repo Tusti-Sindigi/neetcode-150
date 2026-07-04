@@ -1,4 +1,4 @@
-#include <unordered_map>
+#include <vector>
 #include <string>
 using namespace std;
 
@@ -6,47 +6,37 @@ class Solution {
 public:
     string minWindow(string s, string t) 
     {
-        unordered_map<char, int> vt;
-        unordered_map<char, int> vs;
+        vector<int> v(256, 0);
+
+        int l=0, r=0, start=-1, minlen=INT_MAX, count=0;
 
         for(char c: t)
-            vt[c]++;
+            v[c]++;
 
-        int l=-1, minl=-1, minr=-1, req=vt.size(), curr=0;
-
-        for(int r=0;r<s.size();r++)
+        while(r<s.size())
         {
-            if(vt.find(s[r])!=vt.end())
+            if(v[s[r]]>0)
+                count++;
+
+            v[s[r]]--;
+
+            while(count==t.size())
             {
-                vs[s[r]]++;
-                if(l==-1)
-                    l=r;
-            
-                if(vt[s[r]]==vs[s[r]])
-                    curr++;
-
-                while(l<=r && curr==req)
+                if(r-l+1<minlen)
                 {
-                    if((minl==-1 && minr==-1) || (r-l < minr-minl))   // or (r-l+ < minr-minl+1) is also okay for 2nd expression
-                        {
-                            minl=l;
-                            minr=r;
-                        }
-
-                    if(vt[s[l]]==vs[s[l]])
-                        curr--;
-                    
-                    vs[s[l]]--;
-                    l++;
-
-                    while(l<=r && vt.find(s[l])==vt.end())
-                        l++;
+                    minlen=r-l+1;
+                    start=l;
                 }
-            }
-        }
 
-        if(minl==-1 && minr==-1)
-            return "";
-        return s.substr(minl, minr-minl+1);
+                v[s[l]]++;
+
+                if(v[s[l]]>0)
+                    count--;
+
+                l++;
+            }
+            r++;
+        }
+        return start==-1? "" : s.substr(start, minlen);
     }
 };
