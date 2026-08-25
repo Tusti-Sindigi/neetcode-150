@@ -1,5 +1,10 @@
 //using stacks
 
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+
 class Solution {
 public:
     int carFleet(int target, vector<int>& position, vector<int>& speed) 
