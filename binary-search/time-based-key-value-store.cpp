@@ -4,19 +4,34 @@ using namespace std;
 class TimeMap {
 public:
     
-    unordered_map<string, map<int, string>> m;
+    unordered_map<string, vector<pair<int, string>>> m;
 
     TimeMap() {}
     
     void set(string key, string value, int timestamp) 
     {
-        m[key].insert({timestamp, value});
+        m[key].push_back({timestamp, value});   //or m[key].emplace_back(timestamp, value);
     }
     
     string get(string key, int timestamp) 
     {
-        auto curr=m[key].upper_bound(timestamp); //say if there is only one element 10 as the timestamp for a particular key the, the upper_bund func stops at and point at strictly greater than 10, which in this case will be m[key].end() .........  10 ... end()
-        return curr==m[key].begin() ? "" : prev(curr)->second; //since curr=map[key].end() which is not equal to map[key].begin() ... the ternary operator results in false and the prev element of curr is fetched... similarly if it was empty and no items existed in m[key], then curr whould be map[key].end() which is also map[key].begin() and hence the ternary operator would return true and hence ans would have been an empty string ""
+        auto& tv=m[key];   // pls use & with auto to create a reference else tv takes a deep copy of m[key] and eveytime u call get the copy is created and hence time complexity increases dramatically for copying which is almost equal to O(N*L) where N is the no.of elements in m[key] and L is the string length
+        int l=0, r=tv.size()-1;
+        string res="";
+
+        while(l<=r)
+        {
+            int mid=(l+r)/2;
+
+            if(tv[mid].first<=timestamp)
+            {
+                res=tv[mid].second;
+                l=mid+1;
+            }
+            else
+                r=mid-1;
+        }
+        return res;
     }
 };
 
