@@ -7,23 +7,35 @@ struct ListNode {
 
 void reorderList(struct ListNode* head) 
 {
-    struct ListNode *t=head;
+    struct ListNode *slow=head, *fast=head->next;
 
-    if(t!=NULL && t->next!=NULL)
+    while(fast!=NULL && fast->next!=NULL)
     {
-        while(t->next!=NULL && t->next->next!=NULL)
-        {
-            struct ListNode *curr=t->next, *prev=NULL;
-            
-            while(curr)
-            {
-                struct ListNode* temp=curr->next;
-                curr->next=prev;
-                prev=curr;
-                curr=temp;
-            }
-            t->next=prev;
-            t=t->next;
-        }
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+
+    struct ListNode *second=slow->next, *prev=slow->next=NULL;
+
+    while(second!=NULL)
+    {
+        struct ListNode *temp=second->next;
+        second->next=prev;
+        prev=second;
+        second=temp;
+    }
+
+    struct ListNode *first=head;
+    second=prev;
+
+    while(second!=NULL)
+    {
+        struct ListNode *temp1=first->next, *temp2=second->next;
+
+        first->next=second;
+        second->next=temp1;
+
+        first=temp1;
+        second=temp2;
     }
 }
