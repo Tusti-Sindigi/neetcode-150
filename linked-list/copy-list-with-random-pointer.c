@@ -7,7 +7,6 @@ struct Node
     struct Node *random;
 };
 
-
 struct Node* copyRandomList(struct Node* head) 
 {
     if(head==NULL)
