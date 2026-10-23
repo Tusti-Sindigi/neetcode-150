@@ -1,7 +1,13 @@
-// Worst case time complexity = O(N^2)
-// Worst case space complexity = O(N)
+// Using bottom up approach
+
+// Worst case time complexity = O(n)
+// Best case time complexity = O(log(n))
+
+// Worst case space complexity = O(h)
+// Best case space complexity = O(n)
 
 #include <algorithm>
+#include <vector>
 using namespace std;
 
 struct TreeNode {
@@ -17,28 +23,20 @@ class Solution {
 public:
     bool isBalanced(TreeNode* root) 
     {
-        if(!root)
-            return true;
-        
-        bool l=isBalanced(root->left);
-        bool r=isBalanced(root->right);
-
-        if(!(l && r))
-            return false;
-        
-        int left=height(root->left);
-        int right=height(root->right);
-
-        int diff=abs(left-right);
-
-        return (diff==1 || diff==0)? true: false;
+        return dfs(root)[0]==1;
     }
 
-    int height(TreeNode *root)
+    vector<int> dfs(TreeNode *root)
     {
         if(!root)
-            return 0;
+            return {1, 0};
 
-        return 1+max(height(root->left), height(root->right));
+        vector<int> left=dfs(root->left);
+        vector<int> right=dfs(root->right);
+
+        int balanced=(left[0]==1 && right[0]==1) && abs(left[1]-right[1])<=1;
+        int ht=1+max(left[1], right[1]);
+
+        return {balanced? 1: 0, ht};
     }
 };
