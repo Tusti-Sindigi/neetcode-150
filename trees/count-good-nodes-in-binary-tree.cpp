@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 struct TreeNode {
@@ -16,27 +17,26 @@ struct TreeNode {
 class Solution 
 {
 public:
-    int count=1;
 
     int goodNodes(TreeNode* root) 
     {
-        return dfs(root, root->val);   
-    }
+        int count=0;
+        queue<pair<TreeNode*, int>> q;
+        q.push({root, -INT_MAX});
 
-    int dfs(TreeNode *root, int maxi)
-    {
-        if(!root)
-            return 0;
+        while(!q.empty())
+        {
+            auto [temp, maxi]=q.front();
+            q.pop();
 
-        int res=0;
-        if(root->val>=maxi)
-            res=1;
+            if(temp->val>=maxi)
+                count++;
 
-        maxi=max(root->val, maxi);
-        
-        res+=dfs(root->left, maxi);
-        res+=dfs(root->right, maxi);
-        
-        return res;
+            if(temp->left)
+                q.push({temp->left, max(temp->val, maxi)});
+            if(temp->right)
+                q.push({temp->right, max(temp->val, maxi)});
+        }
+        return count;
     }
 };
