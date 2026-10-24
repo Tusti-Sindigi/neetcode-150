@@ -1,5 +1,4 @@
 #include <vector>
-#include <queue>
 using namespace std;
 
 struct TreeNode {
@@ -16,37 +15,24 @@ struct TreeNode {
 
 class Solution {
 public:
+    vector<vector<int>> res;
+
     vector<vector<int>> levelOrder(TreeNode* root) 
     {
-        vector<vector<int>> res;
+        dfs(root, 0);
+        return res;
+    }
 
+    void dfs(TreeNode* root, int ht)
+    {
         if(!root)
-        return res;
+            return;
 
-        queue<TreeNode*> que;
-        que.push(root);
-        
-        while(!que.empty())
-        {
-            int i=que.size();
-            vector<int> v;
+        if(res.size()==ht)
+            res.push_back(vector<int>());
 
-            while(i--)
-            {
-                TreeNode* temp=que.front();
-                que.pop();
-
-                if(temp)
-                {
-                    v.push_back(temp->val);
-                    que.push(temp->left);
-                    que.push(temp->right);
-                }
-            }
-
-            if(!v.empty())
-                res.push_back(v);
-        }
-        return res;
+        res[ht].push_back(root->val);
+        dfs(root->left, ht+1);
+        dfs(root->right, ht+1);
     }
 };
