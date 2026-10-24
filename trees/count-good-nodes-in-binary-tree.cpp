@@ -1,3 +1,6 @@
+#include <algorithm>
+using namespace std;
+
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -8,43 +11,32 @@ struct TreeNode {
 };
 
 // Time complexity = O(n)
-// Space complexity = O(h)
+// Space complexity = O(n)
 
 class Solution 
 {
 public:
     int count=1;
-    
+
     int goodNodes(TreeNode* root) 
     {
-        dfs(root, root->val);
-        return count;    
+        return dfs(root, root->val);   
     }
 
-    void dfs(TreeNode *root, int max)
+    int dfs(TreeNode *root, int maxi)
     {
         if(!root)
-            return;
+            return 0;
 
-        if(root->left)
-        {   
-            int next_max=max;
-            if(root->left->val>=max)
-            {
-                count++;
-                next_max=root->left->val;
-            }    
-            dfs(root->left, next_max);
-        }
-        if(root->right)
-        {   
-            int next_max=max;
-            if(root->right->val>=max)
-            {
-                count++;
-                next_max=root->right->val;
-            }
-            dfs(root->right, next_max);
-        }
+        int res=0;
+        if(root->val>=maxi)
+            res=1;
+
+        maxi=max(root->val, maxi);
+        
+        res+=dfs(root->left, maxi);
+        res+=dfs(root->right, maxi);
+        
+        return res;
     }
 };
