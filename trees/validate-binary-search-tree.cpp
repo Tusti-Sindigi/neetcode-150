@@ -18,24 +18,17 @@ class Solution {
 public:
     bool isValidBST(TreeNode* root) 
     {
-        queue<tuple<TreeNode*, long, long>> q;
-        q.push({root, LONG_MIN, LONG_MAX});
+        return dfs(root, LONG_MIN, LONG_MAX);
+    }
 
-        while(!q.empty())
-        {
-            auto [temp, minimum, maximum]=q.front();
-            q.pop();
+    bool dfs(TreeNode* root, long minimum, long maximum)
+    {
+        if(!root)
+            return true;
 
-            if(!(temp->val>minimum && temp->val<maximum))
-                return false;
+        if(!(root->val>minimum && root->val<maximum))
+            return false;
 
-            if(temp->left)
-                q.push({temp->left, minimum, temp->val});
-
-            if(temp->right)
-                q.push({temp->right, temp->val, maximum});
-        }
-
-        return true;
+        return dfs(root->left, minimum, root->val) && dfs(root->right, root->val, maximum);
     }
 };
